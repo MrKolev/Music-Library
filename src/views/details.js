@@ -42,7 +42,7 @@ function detailsPageTemp(data, ctx) {
             <a href="/edit/${data._id}" id="edit-btn">Edit</a>
             <a @click=${() => {
           if (confirm("Neeeeeee go pravi!")) {
-            daeAlbum();
+            daeAlbum(data._id);
             ctx.page.redirect("/dashboard");
           }
         }} href="javascript:void(0)" id="delete-btn">Delete</a>

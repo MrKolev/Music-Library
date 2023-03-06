@@ -13,6 +13,9 @@ const endpoint = {
     "getLikeFsorSpecificUser": (albumId, userId) => `/data/likes?where=albumId%3D%22${albumId}%22%20and%20_ownerId%3D%22${userId}%22&count`
 }
 
+export async function createAlbum(data) {
+  return await api.post(endpoint.newAlbums, data);
+}
 export async function daeAlbum(id) {
   return await api.del(endpoint.getAlbumId(id));
 }

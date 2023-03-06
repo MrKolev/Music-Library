@@ -1,16 +1,17 @@
 import { html } from "../../node_modules/lit-html/lit-html.js"
+import { createAlbum } from "../api/data.js";
 
 
-export async function createPageView(ctx){
-    ctx.render(createPageTemp())
+export async function createPageView(ctx) {
+  ctx.render(createPageTemp(ctx))
 }
 
-function createPageTemp(){
-return html` 
+function createPageTemp(ctx) {
+  return html` 
 <section id="create">
         <div class="form">
           <h2>Add Album</h2>
-          <form class="create-form">
+          <form @submit=${(e) => onSubmit(e, ctx)} class="create-form">
             <input type="text" name="singer" id="album-singer" placeholder="Singer/Band" />
             <input type="text" name="album" id="album-album" placeholder="Album" />
             <input type="text" name="imageUrl" id="album-img" placeholder="Image url" />
@@ -23,4 +24,35 @@ return html`
         </div>
       </section>
 `
+}
+
+async function onSubmit(e, ctx) {
+  e.preventDefault();
+  const {
+    singer,
+    album,
+    imageUrl,
+    release,
+    label,
+    sales
+  } = Object.fromEntries(new FormData(e.target));
+
+  try {
+    if (!singer || !album || !imageUrl ||
+      !release || !label || !sales) {
+      throw new Error("Fill in all the fields!")
+    }
+    await createAlbum({
+      singer,
+      album,
+      imageUrl,
+      release,
+      label,
+      sales
+    })
+    ctx.page.redirect("/dashboard")
+
+  } catch (error) {
+    alert(error.message)
+  }
 }
