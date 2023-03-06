@@ -12,3 +12,6 @@ const endpoint = {
     "getLikeFsorSpecificUser":(albumId,userId)=>`/data/likes?where=albumId%3D%22${albumId}%22%20and%20_ownerId%3D%22${userId}%22&count`
 }
 
+export async function logout(){
+    return api.get(endpoint.logout);
+}
