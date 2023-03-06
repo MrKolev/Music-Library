@@ -16,7 +16,7 @@ async function request(method, url, data) {
     const user = getUserData();
 
     if (user) {
-        options.headers[`X-Authorization`] = user.access.token;
+        options.headers[`X-Authorization`] = user.accessToken;
     }
 
     try {
@@ -30,7 +30,7 @@ async function request(method, url, data) {
         const result = await response.json();
 
         if (response.ok == false) {
-            if (result.status === 403) {
+            if (result.code === 403) {
                 delUserData();
             }
             throw new Error(result.message);

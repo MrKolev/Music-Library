@@ -1,7 +1,9 @@
+import { updateNavBar } from "../../app.js"
 import { html } from "../../node_modules/lit-html/lit-html.js"
 
 
 export async function homePageView(ctx){
+    updateNavBar();
     ctx.render(homePageTemp())
 }
 

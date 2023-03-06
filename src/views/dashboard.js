@@ -1,53 +1,38 @@
 import { html } from "../../node_modules/lit-html/lit-html.js"
+import { getAllalbums } from "../api/data.js"
 
 
-export async function dashboardPageView(ctx){
-    ctx.render(dashboardPageTemp())
+export async function dashboardPageView(ctx) {
+
+  ctx.render(dashboardPageTemp(await getAllalbums(),ctx.getUserData()))
 }
 
-function dashboardPageTemp(){
-return html` 
+function dashboardPageTemp(data, user) {
+  return html` 
 <section id="dashboard">
         <h2>Albums</h2>
+        
+          ${data.length > 0 ? html`
         <ul class="card-wrapper">
-          <!-- Display a li with information about every post (if any)-->
+          ${data.map((x) => {
+    return html`
           <li class="card">
-            <img src="./images/BackinBlack.jpeg" alt="travis" />
+            <img src="${x.imageUrl}" alt="travis" />
             <p>
-              <strong>Singer/Band: </strong><span class="singer">AC/DC</span>
+              <strong>Singer/Band: </strong><span class="singer">${x.singer}</span>
             </p>
             <p>
-              <strong>Album name: </strong><span class="album">Back in Black</span>
+              <strong>Album name: </strong><span class="album">${x.album}</span>
             </p>
-            <p><strong>Sales:</strong><span class="sales">26 million (50 million claimed)</span></p>
-            <a class="details-btn" href="">Details</a>
+            <p><strong>Sales:</strong><span class="sales">${x.sales}</span></p>
+            ${user ? html `
+            <a class="details-btn" href="/details/${x._id}">Details</a>
+            `: ""}            
           </li>
-          <li class="card">
-            <img src="./images/beatles-1.jpg" alt="travis" />
-            <p>
-              <strong>Singer/Band: </strong><span class="singer">The Beatles</span>
-            </p>
-            <p>
-              <strong>Album name: </strong><span class="album">1</span>
-            </p>
-            <p><strong>Sales:</strong><span class="sales">26 million (31 million claimed)</span></p>
-            <a class="details-btn" href="">Details</a>
-          </li>
-          <li class="card">
-            <img src="./images/pink-floyd-the-wall.jpeg" alt="travis" />
-            <p>
-              <strong>Singer/Band: </strong><span class="singer">Pink Floyd</span>
-            </p>
-            <p>
-              <strong>Album name: </strong><span class="album">The Wall</span>
-            </p>
-            <p><strong>Sales:</strong><span class="sales">18 million (30 million claimed)</span></p>
-            <a class="details-btn" href="">Details</a>
-          </li>
-        </ul>
-
-        <!-- Display an h2 if there are no posts -->
+            `})}
+        </ul>` :
+      html`
         <h2>There are no albums added yet.</h2>
+        `}        
       </section>
-`
-}
+`}
