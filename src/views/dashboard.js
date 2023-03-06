@@ -4,7 +4,7 @@ import { getAllalbums } from "../api/data.js"
 
 export async function dashboardPageView(ctx) {
 
-  ctx.render(dashboardPageTemp(await getAllalbums(),ctx.getUserData()))
+  ctx.render(dashboardPageTemp(await getAllalbums(),ctx.getUserData()));
 }
 
 function dashboardPageTemp(data, user) {
