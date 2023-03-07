@@ -13,6 +13,15 @@ const endpoint = {
     "getLikeFsorSpecificUser": (albumId, userId) => `/data/likes?where=albumId%3D%22${albumId}%22%20and%20_ownerId%3D%22${userId}%22&count`
 }
 
+export async function getLikeFsorSpecificUser(albumId, userId) {
+  return await api.get(endpoint.getLikeFsorSpecificUser(albumId, userId));
+}
+export async function getLikes(albumId) {
+  return await api.get(endpoint.getLikesForAlbum(albumId));
+}
+export async function addLike(albumId) {
+  return await api.post(endpoint.newLikes, {albumId});
+}
 export async function editAlbum(id,data) {
   return await api.put(endpoint.getAlbumId(id), data);
 }

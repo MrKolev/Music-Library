@@ -1,16 +1,19 @@
 import { html } from "../../node_modules/lit-html/lit-html.js"
-import { daeAlbum, getAlbumInfo } from "../api/data.js"
+import { addLike, daeAlbum, getAlbumInfo, getLikeFsorSpecificUser, getLikes } from "../api/data.js"
 
 
 export async function detailsPageView(ctx) {
   const id = ctx.params.id;
   const user = ctx.getUserData();
   ctx.isCreator = false;
- const data = await getAlbumInfo(id);
+ const [data, likes]= await Promise.all([getAlbumInfo(id), getLikes(id)]);
+ ctx.likes = likes;
   if (user) {
     ctx.user = true;
+    ctx.possibleLike = await getLikeFsorSpecificUser(id,user._id);
     if (user._id === data._ownerId) {
       ctx.isCreator = true;
+      ctx.possibleLike = 1;
     }
   }
   ctx.render(detailsPageTemp(data, ctx));
@@ -33,11 +36,15 @@ function detailsPageTemp(data, ctx) {
             <p><strong>Label:</strong><span id="details-label">${data.label}</span></p>
             <p><strong>Sales:</strong><span id="details-sales">${data.sales}</span></p>
           </div>
-          <div id="likes">Likes: <span id="likes-count">0</span></div>
+          <div id="likes">Likes: <span id="likes-count">${ctx.likes}</span></div>
 
           ${ctx.user ? html`
           <div id="action-buttons">
-            <a href="" id="like-btn">Like</a>
+          ${ctx.possibleLike ? "" : html`
+            <a @click=${()=>{
+              addLike(data._id)
+            }} href="/details/${data._id}" id="like-btn">Like</a>
+            `}
             ${ctx.isCreator ? html`
             <a href="/edit/${data._id}" id="edit-btn">Edit</a>
             <a @click=${() => {

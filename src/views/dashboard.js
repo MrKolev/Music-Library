@@ -25,9 +25,7 @@ function dashboardPageTemp(data, user) {
               <strong>Album name: </strong><span class="album">${x.album}</span>
             </p>
             <p><strong>Sales:</strong><span class="sales">${x.sales}</span></p>
-            ${user ? html `
-            <a class="details-btn" href="/details/${x._id}">Details</a>
-            `: ""}            
+            <a class="details-btn" href="/details/${x._id}">Details</a>            
           </li>
             `})}
         </ul>` :
